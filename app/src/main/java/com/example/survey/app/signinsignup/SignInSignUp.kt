@@ -30,7 +30,24 @@ fun SignInSignUpScreen(
         modifier = modifier,
         contentPadding = contentPadding
     ){
+        item{
+            Spacer(modifier = Modifier.height(44.dp))
 
+            Box(
+                modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp)
+            ) {
+                content()
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            OrSignInAsGuest(
+                onSignInAsGuest = onSignInAsGuest,
+                modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp)
+            )
+        }
     }
 }
 
@@ -183,9 +200,25 @@ fun TextFieldError(textError:String){
 }
 
 @Composable
-fun OnSignInAsGuest(
+fun OrSignInAsGuest(
     onSignInAsGuest: () -> Unit,
     modifier: Modifier = Modifier
 ){
-
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ){
+        Text(
+            text = "or",
+            modifier.paddingFromBaseline(top = 25.dp)
+        )
+        OutlinedButton(
+            onClick = onSignInAsGuest,
+            modifier
+                .fillMaxWidth()
+                .padding(top = 20.dp, bottom = 24.dp)
+        ) {
+            Text(text = "Sign in as guest")
+        }
+    }
 }

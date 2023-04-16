@@ -1,7 +1,7 @@
 package com.example.survey.app.signinsignup
 
 
-import android.provider.ContactsContract
+
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -10,10 +10,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.text.input.KeyboardType.Companion.Email
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignInScreen(
     email:String?,
@@ -27,7 +28,44 @@ fun SignInScreen(
     val snackbarActionLabel =  "dismiss"
 
 
+    Scaffold(
+        topBar = {
+            SignInSignUpTopBar(topAppBarText = "Sign in", onNavUp = onNavUp)
+        },
+        content = { contentPadding ->
+            SignInSignUpScreen(
+//                modifier = Modifier.supprtWideScreen(),
+                onSignInAsGuest = onSignInAsGuest,
+                contentPadding = contentPadding
+            ) {
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    SignInContent(
+                        email = email,
+                        onSignInSubmitted = onSignInSubmitted
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    TextButton(
+                        onClick = {
+                            scope.launch {
+                                snackbarHostState.showSnackbar(message = "Error", actionLabel = "Cancel")
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(text = "forgot password")
+                    }
+                }
+            }
+        }
+    )
 
+    Box(modifier = Modifier.fillMaxSize()) {
+        ErrorSnackBar(
+            snackbarHostState = snackbarHostState,
+            onDismiss = {snackbarHostState.currentSnackbarData?.dismiss()},
+            modifier = Modifier.align(Alignment.BottomCenter)
+        )
+    }
 }
 
 @Composable
